@@ -14,10 +14,19 @@ A minimal, elegant web app for comparing AI image generation across multiple mod
 
 ## Configuration
 
-Update the webhook URL in `src/pages/Index.tsx`:
+Provide the webhook URL via an environment variable (`VITE_WEBHOOK_URL`) or update `src/pages/Index.tsx`:
+
+Set an environment variable in a `.env` file at the project root:
+
+```bash
+# .env
+VITE_WEBHOOK_URL="https://your-webhook-endpoint.com/generate"
+```
+
+Or update the file directly (fallback placeholder remains):
 
 ```typescript
-const WEBHOOK_URL = "https://your-webhook-endpoint.com/generate";
+const WEBHOOK_URL = import.meta.env.VITE_WEBHOOK_URL || "https://your-webhook-endpoint.com/generate";
 ```
 
 ## Webhook API Contract

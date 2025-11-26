@@ -13,17 +13,11 @@ interface PromptFormProps {
 
 export function PromptForm({ onGenerate, isGenerating }: PromptFormProps) {
   const [prompt, setPrompt] = useState("");
-  const [selectedModels, setSelectedModels] = useState<ModelName[]>([
+  const [selectedModels] = useState<ModelName[]>([
     "nano_banana_pro",
     "gemini_25",
     "ideogram",
   ]);
-
-  const handleModelToggle = (model: ModelName) => {
-    setSelectedModels((prev) =>
-      prev.includes(model) ? prev.filter((m) => m !== model) : [...prev, model]
-    );
-  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,8 +25,6 @@ export function PromptForm({ onGenerate, isGenerating }: PromptFormProps) {
       onGenerate(prompt, selectedModels);
     }
   };
-
-  const models: ModelName[] = ["nano_banana_pro", "gemini_25", "ideogram"];
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
@@ -50,35 +42,10 @@ export function PromptForm({ onGenerate, isGenerating }: PromptFormProps) {
         />
       </div>
 
-      <div className="space-y-3">
-        <Label className="text-lg font-medium">Select models</Label>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-          {models.map((model) => (
-            <div
-              key={model}
-              className="flex items-center space-x-3 rounded-lg border border-border bg-card p-4 transition-colors hover:bg-accent/50"
-            >
-              <Checkbox
-                id={model}
-                checked={selectedModels.includes(model)}
-                onCheckedChange={() => handleModelToggle(model)}
-                disabled={isGenerating}
-              />
-              <Label
-                htmlFor={model}
-                className="flex-1 cursor-pointer font-medium"
-              >
-                {MODEL_LABELS[model]}
-              </Label>
-            </div>
-          ))}
-        </div>
-      </div>
-
       <Button
         type="submit"
         size="lg"
-        disabled={!prompt.trim() || selectedModels.length === 0 || isGenerating}
+        disabled={!prompt.trim() || isGenerating}
         className="w-full text-base"
       >
         <Wand2 className="mr-2 h-5 w-5" />
