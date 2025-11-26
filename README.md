@@ -1,73 +1,96 @@
-# Welcome to your Lovable project
+# Creative Studio - AI Image Generation
 
-## Project info
+A minimal, elegant web app for comparing AI image generation across multiple models through a webhook API.
 
-**URL**: https://lovable.dev/projects/163377c4-27a4-45d4-87c5-61a44aeae190
+## Features
 
-## How can I edit this code?
+- 🎨 Side-by-side comparison of 3 AI models (Nano Banana Pro, Gemini 2.5, Ideogram)
+- 🔄 Hybrid generation flow with optional follow-up questions
+- 📊 Per-model progress indicators and metadata display
+- 💾 Copy prompt and download image functionality
+- 🛠️ Developer debug drawer for webhook inspection
+- 📱 Fully responsive design
+- ♿ Accessible UI with proper ARIA labels
 
-There are several ways of editing your application.
+## Configuration
 
-**Use Lovable**
+Update the webhook URL in `src/pages/Index.tsx`:
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/163377c4-27a4-45d4-87c5-61a44aeae190) and start prompting.
+```typescript
+const WEBHOOK_URL = "https://your-webhook-endpoint.com/generate";
+```
 
-Changes made via Lovable will be committed automatically to this repo.
+## Webhook API Contract
 
-**Use your preferred IDE**
+### Initial Generation Request
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+```json
+{
+  "prompt": "A futuristic cityscape at sunset",
+  "models": ["nano_banana_pro", "gemini_25", "ideogram"]
+}
+```
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+### Response: Follow-up Questions
 
-Follow these steps:
+```json
+{
+  "status": "followup",
+  "session_id": "abc123",
+  "questions": [
+    {
+      "id": "q1",
+      "text": "What style do you prefer?",
+      "options": [
+        { "label": "Photorealistic", "value": "photo" },
+        { "label": "Artistic", "value": "art" }
+      ]
+    }
+  ]
+}
+```
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+### Answer Questions Request
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+```json
+{
+  "session_id": "abc123",
+  "answers": {
+    "q1": "photo"
+  }
+}
+```
 
-# Step 3: Install the necessary dependencies.
-npm i
+### Response: Final Images
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+```json
+{
+  "status": "done",
+  "results": [
+    {
+      "model": "nano_banana_pro",
+      "image_url": "https://...",
+      "seed": 12345,
+      "prompt_used": "Enhanced prompt text"
+    }
+  ]
+}
+```
+
+## Development
+
+```bash
+npm install
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+## Technologies
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
+- React + TypeScript
 - Tailwind CSS
+- shadcn/ui components
+- Vite
 
-## How can I deploy this project?
+## Project URL
 
-Simply open [Lovable](https://lovable.dev/projects/163377c4-27a4-45d4-87c5-61a44aeae190) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+https://lovable.dev/projects/163377c4-27a4-45d4-87c5-61a44aeae190
